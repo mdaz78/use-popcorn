@@ -1,11 +1,5 @@
-import ListBox from './ListBox';
-import WatchedBox from './WatchedBox';
+const Main = ({ children }) => {
+  return <main className='main'>{children}</main>;
+};
 
-export default function Main() {
-  return (
-    <main className='main'>
-      <ListBox />
-      <WatchedBox />
-    </main>
-  );
-}
+export default Main;
