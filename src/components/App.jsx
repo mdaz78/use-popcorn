@@ -19,13 +19,15 @@ export default function App() {
   const [watched, _setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [query, setQuery] = useState('');
 
-  const query = 'aoeuaoeuao';
+  const handleQuery = (term) => setQuery(term);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
+        setError('');
         const res = await fetch(`${URL}&s=${query}`);
 
         if (!res.ok) {
@@ -47,13 +49,19 @@ export default function App() {
       }
     };
 
+    if (!query.length) {
+      setMovies([]);
+      setError('');
+      return;
+    }
+
     fetchMovies();
-  }, []);
+  }, [query]);
 
   return (
     <>
       <NavBar>
-        <Search />
+        <Search query={query} setQuery={handleQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
