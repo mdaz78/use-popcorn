@@ -11,15 +11,14 @@ import Search from './Search';
 import WatchedMoviesList from './WatchedMoviesList';
 import WatchedSummary from './WatchedSummary';
 
-const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
-const URL = `https://omdbapi.com/?apikey=${API_KEY}`;
+import { URL } from '../constants';
 
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, _setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('inception');
 
   const handleQuery = (term) => setQuery(term);
 
