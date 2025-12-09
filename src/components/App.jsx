@@ -11,7 +11,7 @@ import Search from './Search';
 import WatchedMoviesList from './WatchedMoviesList';
 import WatchedSummary from './WatchedSummary';
 
-import { URL } from '../constants';
+import { API_URL } from '../constants';
 import MovieDetails from './MovieDetails';
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
       try {
         setIsLoading(true);
         setError('');
-        const res = await fetch(`${URL}&s=${query}`);
+        const res = await fetch(`${API_URL}&s=${query}`);
 
         if (!res.ok) {
           throw new Error('Something went wrong with fetching movies');
