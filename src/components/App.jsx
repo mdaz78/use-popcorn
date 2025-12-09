@@ -16,7 +16,7 @@ import MovieDetails from './MovieDetails';
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, _setWatched] = useState([]);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('inception');
@@ -27,6 +27,9 @@ export default function App() {
   const handleSelectMovie = (movieId) => setSelectedId(movieId);
 
   const handleCloseMovie = () => setSelectedId(null);
+
+  const handleSetWatchedMovie = (movie) =>
+    setWatched((prev) => [...prev, movie]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -82,6 +85,7 @@ export default function App() {
             <MovieDetails
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={handleSetWatchedMovie}
             />
           ) : (
             <>

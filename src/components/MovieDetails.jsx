@@ -4,10 +4,11 @@ import ErrorComponent from './ErrorComponent';
 import Loader from './Loader';
 import StarRating from './StarRating';
 
-const MovieDetails = ({ selectedId, onCloseMovie }) => {
+const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched }) => {
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [userRating, setUserRating] = useState(0);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -47,6 +48,21 @@ const MovieDetails = ({ selectedId, onCloseMovie }) => {
     Poster: poster,
   } = movie || {};
 
+  const handleAdd = () => {
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      title: title,
+      year: released,
+      poster: poster,
+      runtime: Number(runtime.split(' ').at(0)),
+      imdbRating: Number(rating),
+      userRating,
+    };
+
+    onAddWatched(newWatchedMovie);
+    onCloseMovie();
+  };
+
   return (
     <div className='details'>
       {isLoading && <Loader />}
@@ -67,11 +83,26 @@ const MovieDetails = ({ selectedId, onCloseMovie }) => {
                 <span>⭐️</span>
                 {rating} IMdb rating
               </p>
+              <p>
+                <span>🌟</span>
+                <span>Your rating</span>
+              </p>
             </div>
           </header>
 
           <section>
-            <StarRating maxRating={10} size={24} defaultRating={rating} />
+            <div className='rating'>
+              <StarRating
+                maxRating={10}
+                size={24}
+                onSetRating={setUserRating}
+              />
+              {userRating > 0 && (
+                <button className='btn-add' onClick={handleAdd}>
+                  + Add to List
+                </button>
+              )}
+            </div>
             <p>
               <em>{plot}</em>
             </p>
