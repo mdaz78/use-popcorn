@@ -1,11 +1,15 @@
 import React from 'react';
 import StarRating from './StarRating';
 
-const MovieDetails = () => {
+const MovieDetails = ({ selectedId, onCloseMovie }) => {
+  console.log(selectedId);
+
   return (
     <div className='details'>
       <header>
-        <button className='btn-back'>&larr;</button>
+        <button className='btn-back' onClick={onCloseMovie}>
+          &larr;
+        </button>
         <img src='' alt='' />
         <div className='details-overview'>
           <h2>title</h2>
