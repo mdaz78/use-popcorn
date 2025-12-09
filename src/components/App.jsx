@@ -31,6 +31,13 @@ export default function App() {
   const handleSetWatchedMovie = (movie) =>
     setWatched((prev) => [...prev, movie]);
 
+  const handleDeleteWatchedMovie = (movieId) => {
+    const updatedWatchedList = watched.filter(
+      (movie) => movie.imdbID !== movieId
+    );
+    setWatched(updatedWatchedList);
+  };
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -45,7 +52,6 @@ export default function App() {
         const data = await res.json();
 
         if (data.Response === 'False') {
-          console.log('here');
           throw new Error('Movie not found');
         }
 
@@ -86,11 +92,15 @@ export default function App() {
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
               onAddWatched={handleSetWatchedMovie}
+              watched={watched}
             />
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
+              <WatchedMoviesList
+                watched={watched}
+                onDeleteWatchedMovie={handleDeleteWatchedMovie}
+              />
             </>
           )}
         </Box>

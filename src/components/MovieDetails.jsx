@@ -4,11 +4,14 @@ import ErrorComponent from './ErrorComponent';
 import Loader from './Loader';
 import StarRating from './StarRating';
 
-const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched }) => {
+const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [userRating, setUserRating] = useState(0);
+
+  const foundMovie = watched.find((movie) => movie.imdbID === selectedId);
+  const isAddedToWatched = foundMovie ? true : false;
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -25,8 +28,6 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched }) => {
 
         setIsLoading(false);
         setMovie(data);
-
-        console.log(data);
       } catch (err) {
         setError(err.message);
         setIsLoading(false);
@@ -92,12 +93,19 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched }) => {
 
           <section>
             <div className='rating'>
-              <StarRating
-                maxRating={10}
-                size={24}
-                onSetRating={setUserRating}
-              />
-              {userRating > 0 && (
+              {!isAddedToWatched ? (
+                <StarRating
+                  maxRating={10}
+                  size={24}
+                  onSetRating={setUserRating}
+                  defaultRating={userRating}
+                />
+              ) : (
+                <p>
+                  You rated this movie {foundMovie.userRating} <span>⭐️</span>
+                </p>
+              )}
+              {userRating > 0 && !isAddedToWatched && (
                 <button className='btn-add' onClick={handleAdd}>
                   + Add to List
                 </button>
