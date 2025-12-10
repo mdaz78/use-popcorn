@@ -60,6 +60,8 @@ export default function App() {
       } catch (err) {
         setError(err.message);
         setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 

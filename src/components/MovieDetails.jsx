@@ -58,6 +58,8 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
       } catch (err) {
         setError(err.message);
         setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 
