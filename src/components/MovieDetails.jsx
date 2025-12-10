@@ -95,7 +95,7 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
     return () => {
       document.removeEventListener('keydown', callback);
     };
-  }, []);
+  }, [onCloseMovie]);
 
   if (!movie) {
     return;
