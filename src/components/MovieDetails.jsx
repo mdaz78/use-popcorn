@@ -13,30 +13,6 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
   const foundMovie = watched.find((movie) => movie.imdbID === selectedId);
   const isAddedToWatched = foundMovie ? true : false;
 
-  useEffect(() => {
-    const fetchMovieDetails = async () => {
-      try {
-        setIsLoading(true);
-        setError('');
-        const response = await fetch(`${API_URL}&i=${selectedId}`);
-
-        if (!response.ok) {
-          throw new Error('Something went wrong with fetching movie details');
-        }
-
-        const data = await response.json();
-
-        setIsLoading(false);
-        setMovie(data);
-      } catch (err) {
-        setError(err.message);
-        setIsLoading(false);
-      }
-    };
-
-    fetchMovieDetails();
-  }, [selectedId]);
-
   const {
     Title: title,
     Released: released,
@@ -63,6 +39,39 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   };
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        setIsLoading(true);
+        setError('');
+        const response = await fetch(`${API_URL}&i=${selectedId}`);
+
+        if (!response.ok) {
+          throw new Error('Something went wrong with fetching movie details');
+        }
+
+        const data = await response.json();
+
+        setIsLoading(false);
+        setMovie(data);
+      } catch (err) {
+        setError(err.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchMovieDetails();
+  }, [selectedId]);
+
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+
+    return () => {
+      document.title = 'usePopcorn';
+    };
+  }, [title]);
 
   return (
     <div className='details'>
