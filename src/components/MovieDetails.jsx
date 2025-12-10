@@ -41,11 +41,15 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
   };
 
   useEffect(() => {
+    const abortController = new AbortController();
+
     const fetchMovieDetails = async () => {
       try {
         setIsLoading(true);
         setError('');
-        const response = await fetch(`${API_URL}&i=${selectedId}`);
+        const response = await fetch(`${API_URL}&i=${selectedId}`, {
+          signal: abortController.signal,
+        });
 
         if (!response.ok) {
           throw new Error('Something went wrong with fetching movie details');
@@ -56,14 +60,18 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
         setIsLoading(false);
         setMovie(data);
       } catch (err) {
-        setError(err.message);
-        setIsLoading(false);
-      } finally {
-        setIsLoading(false);
+        if (!abortController.signal.aborted) {
+          setError(err.message);
+          setIsLoading(false);
+        }
       }
     };
 
     fetchMovieDetails();
+
+    return () => {
+      abortController.abort();
+    };
   }, [selectedId]);
 
   useEffect(() => {
@@ -74,6 +82,10 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
       document.title = 'usePopcorn';
     };
   }, [title]);
+
+  if (!movie) {
+    return;
+  }
 
   return (
     <div className='details'>
