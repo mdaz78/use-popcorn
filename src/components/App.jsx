@@ -11,87 +11,44 @@ import Search from './Search';
 import WatchedMoviesList from './WatchedMoviesList';
 import WatchedSummary from './WatchedSummary';
 
-import { API_URL } from '../constants';
+import { useMovies } from '../hooks/useMovies';
 import MovieDetails from './MovieDetails';
 
 export default function App() {
-  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(() => {
     const storedValue = localStorage.getItem('watched');
     return JSON.parse(storedValue) ?? [];
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+  const { movies, isLoading, error } = useMovies(query);
 
-  const handleQuery = (term) => setQuery(term);
+  function handleQuery(term) {
+    setQuery(term);
+  }
 
-  const handleSelectMovie = (movieId) => setSelectedId(movieId);
+  function handleSelectMovie(movieId) {
+    setSelectedId(movieId);
+  }
 
-  const handleCloseMovie = () => setSelectedId(null);
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
 
-  const handleSetWatchedMovie = (movie) =>
+  function handleSetWatchedMovie(movie) {
     setWatched((prev) => [...prev, movie]);
+  }
 
-  const handleDeleteWatchedMovie = (movieId) => {
+  function handleDeleteWatchedMovie(movieId) {
     const updatedWatchedList = watched.filter(
       (movie) => movie.imdbID !== movieId
     );
     setWatched(updatedWatchedList);
-  };
+  }
 
   useEffect(() => {
     localStorage.setItem('watched', JSON.stringify(watched));
   }, [watched]);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-
-    const fetchMovies = async () => {
-      try {
-        setIsLoading(true);
-        setError('');
-        const res = await fetch(`${API_URL}&s=${query}`, {
-          signal: abortController.signal,
-        });
-
-        if (!res.ok) {
-          throw new Error('Something went wrong with fetching movies');
-        }
-
-        const data = await res.json();
-
-        if (data.Response === 'False') {
-          throw new Error('Movie not found');
-        }
-
-        if (!abortController.signal.aborted) {
-          setMovies(data.Search);
-          setIsLoading(false);
-        }
-      } catch (err) {
-        if (err.name !== 'AbortError') {
-          setError(err.message);
-          setIsLoading(false);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (!query.length) {
-      setMovies([]);
-      setError('');
-      return;
-    }
-
-    fetchMovies();
-
-    return () => {
-      abortController.abort();
-    };
-  }, [query]);
 
   return (
     <>
