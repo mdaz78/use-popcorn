@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { API_URL } from '../constants';
+import { API_URL } from '../config/constants';
 
 export const useMovies = (query) => {
   const [movies, setMovies] = useState([]);

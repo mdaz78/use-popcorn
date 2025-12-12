@@ -1,19 +1,19 @@
 import { useState } from 'react';
 
-import Box from './Box';
-import ErrorComponent from './ErrorComponent';
-import Loader from './Loader';
-import Main from './Main';
-import MovieList from './MovieList';
-import NavBar from './NavBar';
-import NumResults from './NumResults';
-import Search from './Search';
-import WatchedMoviesList from './WatchedMoviesList';
-import WatchedSummary from './WatchedSummary';
+import Main from './components/layout/Main';
+import NavBar from './components/layout/NavBar';
+import NumResults from './components/layout/NumResults';
+import MovieList from './components/movie/MovieList';
+import Search from './components/movie/Search';
+import Box from './components/ui/Box';
+import ErrorComponent from './components/ui/ErrorComponent';
+import Loader from './components/ui/Loader';
+import WatchedMoviesList from './components/watched/WatchedMoviesList';
+import WatchedSummary from './components/watched/WatchedSummary';
 
-import { useLocalStorageState } from '../hooks/useLocalStorageState';
-import { useMovies } from '../hooks/useMovies';
-import MovieDetails from './MovieDetails';
+import MovieDetails from './components/movie/MovieDetails';
+import { useLocalStorageState } from './hooks/useLocalStorageState';
+import { useMovies } from './hooks/useMovies';
 
 export default function App() {
   const [watched, setWatched] = useLocalStorageState('watched', []);

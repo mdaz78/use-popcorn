@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { API_URL } from '../constants';
-import { useKey } from '../hooks/useKey';
-import ErrorComponent from './ErrorComponent';
-import Loader from './Loader';
-import StarRating from './StarRating';
+import { API_URL } from '../../config/constants';
+import { useKey } from '../../hooks/useKey';
+import ErrorComponent from '../ui/ErrorComponent';
+import Loader from '../ui/Loader';
+import StarRating from '../ui/StarRating';
 
 const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
   const [movie, setMovie] = useState(null);
