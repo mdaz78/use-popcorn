@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { API_URL } from '../constants';
+import { useKey } from '../hooks/useKey';
 import ErrorComponent from './ErrorComponent';
 import Loader from './Loader';
 import StarRating from './StarRating';
@@ -83,19 +84,7 @@ const MovieDetails = ({ selectedId, watched, onCloseMovie, onAddWatched }) => {
     };
   }, [title]);
 
-  useEffect(() => {
-    const callback = (e) => {
-      if (e.code === 'Escape') {
-        onCloseMovie();
-      }
-    };
-
-    document.addEventListener('keydown', callback);
-
-    return () => {
-      document.removeEventListener('keydown', callback);
-    };
-  }, [onCloseMovie]);
+  useKey('Escape', onCloseMovie);
 
   if (!movie) {
     return;
