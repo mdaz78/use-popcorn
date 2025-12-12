@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Box from './Box';
 import ErrorComponent from './ErrorComponent';
@@ -11,14 +11,12 @@ import Search from './Search';
 import WatchedMoviesList from './WatchedMoviesList';
 import WatchedSummary from './WatchedSummary';
 
+import { useLocalStorageState } from '../hooks/useLocalStorageState';
 import { useMovies } from '../hooks/useMovies';
 import MovieDetails from './MovieDetails';
 
 export default function App() {
-  const [watched, setWatched] = useState(() => {
-    const storedValue = localStorage.getItem('watched');
-    return JSON.parse(storedValue) ?? [];
-  });
+  const [watched, setWatched] = useLocalStorageState('watched', []);
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const { movies, isLoading, error } = useMovies(query);
@@ -45,10 +43,6 @@ export default function App() {
     );
     setWatched(updatedWatchedList);
   }
-
-  useEffect(() => {
-    localStorage.setItem('watched', JSON.stringify(watched));
-  }, [watched]);
 
   return (
     <>
